@@ -1,0 +1,20 @@
+# role tasks
+- name: Install haproxy and socat packages.
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - haproxy
+    - socat
+
+- name: Enable and start the haproxy service
+  service:
+    name: haproxy
+    state: started
+    enabled: true
+
+- name: Configure the haproxy cnf file with hosts
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+  notify: restart haproxy
